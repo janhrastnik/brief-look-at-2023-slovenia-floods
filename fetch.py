@@ -2,29 +2,46 @@ from zipfile import ZipFile
 import requests
 import os.path
 
-# data source info: https://podatki.gov.si/dataset/opozorilna-karta-poplav
-# url to data source: https://www.statika.evode.gov.si/fileadmin/vodkat/DRSV_OPKP_ZR_POPL.zip
+# data source: https://podatki.gov.si/dataset/opozorilna-karta-poplav
+# we need to fetch three different shapefiles, which display three different levels of flood hazardous areas
+# DRSV_OPKP_ZR_POPL
 
-def fetch_data() -> bool:
-    """returns true if data was successfully fetched, and false if something went wrong"""
-    print("Now fetching the required shapefile data")
+def generic_fetch(file_url: str, file_name: str) -> bool:
+    """Helper function for fetching flood file data"""
+    print("Now fetching " + file_name + " shapefile")
 
-    if os.path.isfile("data.shp"):
+    if os.path.isfile(file_name + ".shp"):
         # we already have the data file, in which case we can just return true now
-        print("Found existing 'data.shp' file!")
+        print("Found existing " + file_name + " shapefile!")
         return True
     
     # unfortunately, the government site has an expired certificate...
-    data = requests.get("https://www.statika.evode.gov.si/fileadmin/vodkat/DRSV_OPKP_ZR_POPL.zip", verify=False)
+    data = requests.get(file_url, verify=False)
     if data.ok:
-        with open("data.zip", "wb") as F:
+        with open(file_name + ".zip", "wb") as F:
             F.write(data.content)
 
-    with ZipFile("data.zip") as zip:
-        with zip.open("DRSV_OPKP_ZR_POPL.shp") as shapefile:
-            with open("data.shp", "wb") as F:
+    shx_received = False
+    
+    with ZipFile(file_name + ".zip") as zip:
+        with zip.open(file_name + ".shx") as shapefile:
+            with open(file_name + ".shx", "wb") as F:
                 res = F.write(shapefile.read())
                 if res:
-                    print("'data.shp' has been successfully fetched and saved!")
-                    return True
+                    print(file_name + ".shx has been successfully fetched and saved!")
+                    shx_received = True
+        with zip.open(file_name + ".shp") as shapefile:
+            with open(file_name + ".shp", "wb") as F:
+                res = F.write(shapefile.read())
+                if res:
+                    print(file_name + ".shp has been successfully fetched and saved!")
+                    if shx_received:
+                        # both files have been received
+                        return True
     return False
+
+def fetch_data() -> bool:
+    """Returns true if data was successfully fetched, and false if something went wrong"""
+    print("Now fetching the required shapefiles")
+
+    return generic_fetch("https://www.statika.evode.gov.si/fileadmin/vodkat/DRSV_OPKP_ZR_POPL.zip", "DRSV_OPKP_ZR_POPL")

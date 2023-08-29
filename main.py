@@ -1,4 +1,5 @@
 from fetch import fetch_data
+from display import display_data
 
 """
     Main file that runs the project.
@@ -11,4 +12,7 @@ print("\n~~~~~~~~~~~~~~~~")
 print("~ The Project™ ~")
 print("~~~~~~~~~~~~~~~~\n")
 
-fetch_data()
+res = fetch_data()
+if res:
+    display_data()
+
