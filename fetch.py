@@ -50,7 +50,7 @@ def generic_fetch(file_url: str, file_name: str) -> bool:
 def fetch_data() -> bool:
     """Returns true if data was successfully fetched, and false if something went wrong"""
 
-    print("Now fetching the required shapefiles")
+    print("Now fetching the required shapefiles...")
 
     very_rare = generic_fetch("https://www.statika.evode.gov.si/fileadmin/vodkat/DRSV_OPKP_ZR_POPL.zip", "DRSV_OPKP_ZR_POPL")
     rare = generic_fetch("https://www.statika.evode.gov.si/fileadmin/vodkat/DRSV_OPKP_REDKE_POPL.zip", "DRSV_OPKP_REDKE_POPL")
