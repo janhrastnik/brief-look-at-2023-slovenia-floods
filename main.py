@@ -1,4 +1,5 @@
 from fetch import fetch_data
+from analyse import analyse_data
 from display import display_data
 
 """
@@ -8,11 +9,12 @@ from display import display_data
         2. Analysing the data
         3. Displaying the data
 """
+
 print("\n~~~~~~~~~~~~~~~~")
 print("~ The Project™ ~")
 print("~~~~~~~~~~~~~~~~\n")
 
-res = fetch_data()
-if res:
-    display_data()
+if fetch_data():
+    analyse_data()
+    #display_data()
 

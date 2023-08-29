@@ -4,10 +4,10 @@ import os.path
 
 # data source: https://podatki.gov.si/dataset/opozorilna-karta-poplav
 # we need to fetch three different shapefiles, which display three different levels of flood hazardous areas
-# DRSV_OPKP_ZR_POPL
 
 def generic_fetch(file_url: str, file_name: str) -> bool:
     """Helper function for fetching flood file data"""
+
     print("Now fetching " + file_name + " shapefile")
 
     if os.path.isfile(file_name + ".shp"):
@@ -16,20 +16,27 @@ def generic_fetch(file_url: str, file_name: str) -> bool:
         return True
     
     # unfortunately, the government site has an expired certificate...
+    # so this will throw a warning in our output upon running, but the files are safe
     data = requests.get(file_url, verify=False)
     if data.ok:
         with open(file_name + ".zip", "wb") as F:
             F.write(data.content)
 
+    # this bool will help us check if both required files have been successfully saved
     shx_received = False
     
+    # this is the zip file we have downloaded
+    # inside are (amongst other files) 2 shapefiles (.shp and .shx), which we need
+    # these files represent geospatial data on the map
     with ZipFile(file_name + ".zip") as zip:
+
         with zip.open(file_name + ".shx") as shapefile:
             with open(file_name + ".shx", "wb") as F:
                 res = F.write(shapefile.read())
                 if res:
                     print(file_name + ".shx has been successfully fetched and saved!")
                     shx_received = True
+
         with zip.open(file_name + ".shp") as shapefile:
             with open(file_name + ".shp", "wb") as F:
                 res = F.write(shapefile.read())
@@ -42,6 +49,14 @@ def generic_fetch(file_url: str, file_name: str) -> bool:
 
 def fetch_data() -> bool:
     """Returns true if data was successfully fetched, and false if something went wrong"""
+
     print("Now fetching the required shapefiles")
 
-    return generic_fetch("https://www.statika.evode.gov.si/fileadmin/vodkat/DRSV_OPKP_ZR_POPL.zip", "DRSV_OPKP_ZR_POPL")
+    very_rare = generic_fetch("https://www.statika.evode.gov.si/fileadmin/vodkat/DRSV_OPKP_ZR_POPL.zip", "DRSV_OPKP_ZR_POPL")
+    rare = generic_fetch("https://www.statika.evode.gov.si/fileadmin/vodkat/DRSV_OPKP_REDKE_POPL.zip", "DRSV_OPKP_REDKE_POPL")
+    common = generic_fetch("https://www.statika.evode.gov.si/fileadmin/vodkat/DRSV_OPKP_POGOSTE_POPL.zip", "DRSV_OPKP_POGOSTE_POPL")
+
+    if very_rare and rare and common:
+        # all shapefiles have been fetched and saved!
+        return True
+    
