@@ -8,7 +8,7 @@ class FloodData:
         self.deaths = deaths
 
     def format_locations(self):
-        return " ".join(self.locations)
+        return " | ".join(self.locations)
 
     def __repr__(self):
         return self.title + ", " + self.date

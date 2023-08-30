@@ -33,7 +33,7 @@ def analyse_data() -> FloodData:
     deaths = deaths_element.td.string
 
     # our flood data object, that will be useful later
-    flood_data = FloodData(title, date, locations, deaths);
+    flood_data = FloodData(title, date, locations, deaths)
 
     # while we are here, let's compare / analyse the sizes of our shapefiles
     common_size = os.path.getsize("DRSV_OPKP_POGOSTE_POPL.shp")

@@ -8,8 +8,7 @@ def display_data(flood_data: FloodData):
 
     fig, ax = plt.subplots()
 
-    fig.suptitle(flood_data.title)
-    plt.title(flood_data.date)
+    fig.suptitle('Areas of different flood severity')
 
     slovenia = geopandas.read_file("assets/P250V7000_pF.shp")
     slovenia.plot(ax=ax)
