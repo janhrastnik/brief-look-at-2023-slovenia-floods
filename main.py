@@ -17,5 +17,5 @@ print("~~~~~~~~~~~~~~~~\n")
 if fetch_data():
     flood_data = analyse_data()
     if flood_data:
-        display_data()
+        display_data(flood_data)
 

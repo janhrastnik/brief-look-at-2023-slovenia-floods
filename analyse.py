@@ -48,4 +48,4 @@ def analyse_data() -> FloodData:
         # i.e. we can think of the commonly flooded areas as a subset of the very rare floods
         # and we would expect to see such a result later on the map as well
     
-    return True
+    return flood_data
