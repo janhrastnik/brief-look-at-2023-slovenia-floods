@@ -4,7 +4,15 @@ import matplotlib.patches as mpatches
 from flood_data import FloodData
 
 def display_data(flood_data: FloodData):
-    """Displays a matplotlib plot, that contains an outline of Slovenia, and the 3 flood regions that we fetch from the government"""
+    """
+        Displays a matplotlib plot, that contains an outline of Slovenia, and the 3 flood regions that we fetch from the government
+        Also logs some info about the 2023 floods into the console.
+    """
+
+    print("\n - - - Some info about the {title} - - -".format(title=flood_data.title))
+    print("It took place on {date}".format(date=flood_data.date))
+    print("Main flooding locations were in {locations}".format(locations=flood_data.format_locations()))
+    print("At least {deaths} casualties happened due to these floods".format(deaths=flood_data.deaths))
 
     fig, ax = plt.subplots()
 

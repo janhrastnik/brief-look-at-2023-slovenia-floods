@@ -47,8 +47,8 @@ def generic_fetch(file_url: str, file_name: str) -> bool:
                         return True
     return False
 
-def fetch_data() -> bool:
-    """Returns true if data was successfully fetched, and false if something went wrong"""
+def fetch_data() -> bytes:
+    """Returns html of the wiki page on the 2023 floods if data was successfully fetched, throws an error otherwise"""
 
     print("Now fetching the required shapefiles...")
 
@@ -58,5 +58,12 @@ def fetch_data() -> bool:
 
     if very_rare and rare and common:
         # all shapefiles have been fetched and saved!
-        return True
+        # now we fetch html of the wiki page on the 2023 floods 
+        print("\nNow fetching info about the floods from wikipedia")
+
+        wiki_html = requests.get("https://en.wikipedia.org/wiki/2023_Slovenia_floods")
+
+        if wiki_html.ok:
+            return wiki_html.content
+    raise Exception("Something went wrong while fetching data.")
     

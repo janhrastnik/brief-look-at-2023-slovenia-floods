@@ -3,21 +3,14 @@ from flood_data import FloodData
 import requests
 import os.path
 
-def analyse_data() -> FloodData:
+def analyse_data(wiki_bytes: bytes) -> FloodData:
     """
         Here we collect some data about the flood from the wikipedia article about it.
         We use web scraping via beautifulSoup to receive it.
         Returns a floodData object if everything went ok.
     """
 
-    print("\nNow fetching info about the floods from wikipedia")
-
-    wiki_html = requests.get("https://en.wikipedia.org/wiki/2023_Slovenia_floods")
-
-    if not wiki_html.ok:
-        return False
-    
-    soup = BeautifulSoup(wiki_html.content, 'html.parser')
+    soup = BeautifulSoup(wiki_bytes, 'html.parser')
 
     # the web scraping part of code
     title_element = soup.find("caption", class_="infobox-title")

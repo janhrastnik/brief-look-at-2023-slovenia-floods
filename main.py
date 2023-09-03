@@ -14,8 +14,12 @@ print("\n~~~~~~~~~~~~~~~~")
 print("~ The Project™ ~")
 print("~~~~~~~~~~~~~~~~\n")
 
-if fetch_data():
-    flood_data = analyse_data()
+# first we fetch some required data 
+# here we return bytes of html of the wiki for the 2023 floods
+wiki_bytes = fetch_data()
+
+if wiki_bytes:
+    flood_data = analyse_data(wiki_bytes)
     if flood_data:
         display_data(flood_data)
 
