@@ -1,7 +1,27 @@
 from bs4 import BeautifulSoup
 from flood_data import FloodData
+from historical_weather_data import HistoricalWeatherData
 import requests
 import os.path
+
+def handle_historical_weather_data(location, evaled_file) -> HistoricalWeatherData:
+    data = evaled_file['data']
+    
+    temp = []
+    wind = []
+    solar = []
+    rain = []
+    
+    for entry in data:
+        # an entry looks like this: 
+        # coords, model name, model elevation, utc offset, temp, wind speed, solar radiation, precipitation
+
+        temp.append(entry[4])
+        wind.append(entry[5])
+        solar.append(entry[6])
+        rain.append(entry[7])
+
+    return HistoricalWeatherData(location, temp, wind, solar, rain)
 
 def analyse_data(wiki_bytes: bytes) -> FloodData:
     """
@@ -44,5 +64,32 @@ def analyse_data(wiki_bytes: bytes) -> FloodData:
     # WEATHER DATA
     # here we take a look at historical weather data, for the 4 most flood-exposed areas that we fetched above
     # the data is already fetched, using the 'get_weather_data.py' file
+
+    carinthia_historical = None 
+    carniola_historical = None 
+    littoral_historical = None 
+    styria_historical = None 
+    
+    with open('fetched_weather_data/carinthia.json', 'r') as F:
+        evaled_file = eval(F.read())
+        carinthia_historical = handle_historical_weather_data('Carinthia', evaled_file)
+
+    with open('fetched_weather_data/carniola.json', 'r') as F:
+        evaled_file = eval(F.read())
+        carniola_historical = handle_historical_weather_data('Carniola', evaled_file)
+
+    with open('fetched_weather_data/littoral.json', 'r') as F:
+        evaled_file = eval(F.read())
+        littoral_historical = handle_historical_weather_data('Slovene Littoral', evaled_file)
+
+    with open('fetched_weather_data/styria.json', 'r') as F:
+        evaled_file = eval(F.read())
+        styria_historical = handle_historical_weather_data('Styria', evaled_file)
+
+    print(carinthia_historical.max_precipitation())
+    print(carniola_historical.max_precipitation())
+    print(littoral_historical.max_precipitation())
+    print(styria_historical.max_precipitation())
+    
     
     return flood_data
