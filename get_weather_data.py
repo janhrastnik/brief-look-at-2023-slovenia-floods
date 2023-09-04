@@ -16,20 +16,33 @@ with open("apikey.txt", "r") as F:
 url = 'https://api.oikolab.com/weather'
 
 locations = "Slovene Littoral, Upper Carniola, Carinthia, Styria"
-dates = "2023-08-03;2023-08-04;2023-08-05;2023-08-06"
-
-params = {'param': 'temperature',
-    'location': 'Slovene Littoral, Slovenia',
-    'start': '2023-08-03',
-    'end': '2023-08-06'}
 
 headers = {'api-key': api_key}
 
-res = requests.get(url, params=params, headers=headers)
+def generic_params(location: str):
+    return {
+        'param': ['temperature', 'wind_speed', 'surface_solar_radiation', 'total_precipitation'],
+        'location': location,
+        'start': '2023-08-03',
+        'end': '2023-08-06'
+    }
 
-if res.ok:
-    evaled_text = eval(res.text)
-    data = evaled_text['data']
-    evaled_data = eval(data)
-    with open("fetched_weather_data/littoral.json", "w") as F:
-        json.dump(evaled_data, F)
+def generic_call(location: str, filename: str):
+    params = generic_params(location)
+
+    res = requests.get(url, params=params, headers=headers)
+
+    if res.ok:
+        evaled_text = eval(res.text)
+        data = evaled_text['data']
+        evaled_data = eval(data)
+        with open("fetched_weather_data/{filename}".format(filename=filename), "w") as F:
+            json.dump(evaled_data, F)
+            print("Saved {filename}".format(filename=filename))
+    else:
+        print(res.reason)
+
+generic_call('Slovene Littoral, Slovenia', 'littoral.json')
+generic_call('Upper Carniola, Slovenia', 'carniola.json')
+generic_call('Carinthia, Slovenia', 'carinthia.json')
+generic_call('Styria, Slovenia', 'styria.json')
