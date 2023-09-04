@@ -40,5 +40,9 @@ def analyse_data(wiki_bytes: bytes) -> FloodData:
         # the area of commonly flooded areas should be smaller than the area of very rare floods
         # i.e. we can think of the commonly flooded areas as a subset of the very rare floods
         # and we would expect to see such a result later on the map as well
+
+    # WEATHER DATA
+    # here we take a look at historical weather data, for the 4 most flood-exposed areas that we fetched above
+    # the data is already fetched, using the 'get_weather_data.py' file
     
     return flood_data

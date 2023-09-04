@@ -42,7 +42,7 @@ def generic_call(location: str, filename: str):
     else:
         print(res.reason)
 
-generic_call('Slovene Littoral, Slovenia', 'littoral.json')
-generic_call('Upper Carniola, Slovenia', 'carniola.json')
-generic_call('Carinthia, Slovenia', 'carinthia.json')
-generic_call('Styria, Slovenia', 'styria.json')
+generic_call('Primorska, Slovenija', 'littoral.json')
+generic_call('Gorenjska, Slovenija', 'carniola.json')
+generic_call('Koroška, Slovenija', 'carinthia.json')
+generic_call('Štajerska, Slovenija', 'styria.json')
