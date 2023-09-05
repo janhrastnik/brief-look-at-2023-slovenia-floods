@@ -86,10 +86,20 @@ def analyse_data(wiki_bytes: bytes) -> FloodData:
         evaled_file = eval(F.read())
         styria_historical = handle_historical_weather_data('Styria', evaled_file)
 
-    print(carinthia_historical.max_precipitation())
-    print(carniola_historical.max_precipitation())
-    print(littoral_historical.max_precipitation())
-    print(styria_historical.max_precipitation())
+    print("\n - - - Weather reports for 3rd August to 6th August - - - \n")
     
+    max_precipitations = []
+    
+    max_precipitations.append(carinthia_historical.report())
+    max_precipitations.append(carniola_historical.report())
+    max_precipitations.append(littoral_historical.report())
+    max_precipitations.append(styria_historical.report())
+
+    current_max = [0, "foo"]
+    for entry in max_precipitations:
+        if entry[0] > current_max[0]:
+            current_max = entry
+
+    print("\nThe region with the heaviest rainfall was {}\n".format(current_max[1]))
     
     return flood_data
